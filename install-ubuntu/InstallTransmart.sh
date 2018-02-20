@@ -134,7 +134,7 @@ if ! [ -e transmart-data ] ; then
 	mv $TRANSMART_DATA_NAME transmart-data
 fi
 
-echo "Finished setting up the transmart-date folder at $(date)"
+echo "Finished setting up the transmart-data folder at $(date)"
 
 echo "++++++++++++++++++++++++++++"
 echo "+  set up the tranSMART-ETL folder"
@@ -376,6 +376,8 @@ sudo -v
 cd $INSTALL_BASE/transmart-data
 source ./vars
 sudo TABLESPACES=$TABLESPACES TRANSMART_USER="tomcat7" make -C R install_rserve_init
+#sudo TABLESPACES=$TABLESPACES TRANSMART_USER="tomcat7" make -C R install_rserve_upstart
+sudo TABLESPACES=$TABLESPACES TRANSMART_USER="tomcat7" make -C R install_rserve_unit
 
 cd $SCRIPTS_BASE/Scripts/install-ubuntu/checks
 ./checkFilesR.sh
@@ -460,13 +462,10 @@ echo "++++++++++++++++++++++++++++"
 echo "+  start Rserve"
 echo "++++++++++++++++++++++++++++"
 
-# the (commented out) service command is the correct way to do this
-# and unfortunately, this does not work either.
-#  (TODO)  Should check to see if it is already running
 sudo -v
 cd $SCRIPTS_BASE/Scripts/install-ubuntu
-sudo -u tomcat7 bash -c "INSTALL_BASE=\"$INSTALL_BASE\" ./runRServe.sh"
-#sudo service rserve start - is not working - not sure why
+#sudo -u tomcat7 bash -c "INSTALL_BASE=\"$INSTALL_BASE\" ./runRServe.sh"
+sudo service rserve restart
 echo "Finished starting RServe at $(date)"
 
 echo "++++++++++++++++++++++++++++"
@@ -485,7 +484,7 @@ echo "++++++++++++++++++++++++++++"
 
 set e+
 cd $SCRIPTS_BASE/Scripts/install-ubuntu/checks
-./checkFilesTomcat.sh
+sudo ./checkFilesTomcat.sh
 ./checkTools.sh
 ./checkWeb.sh
 

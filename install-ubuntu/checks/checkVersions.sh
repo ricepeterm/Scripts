@@ -52,6 +52,8 @@ reportCheckOrHigher "groovy" $desiredGroovyVersion $groovyVersion
 
 let "returnFlag=$returnFlag + $?"
 
+# JAVA_HOME value required for grails to report a version
+export JAVA_HOME=/usr/lib/jvm/java-7-openjdk-amd64
 # check grails version, exactly 2.3.11
 desiredGrailsVersion="2.3.11"
 grailsVersion=$(grails --version | awk -F '^Grails version: ' '{print $2}')
